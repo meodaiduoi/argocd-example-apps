@@ -1,8 +1,10 @@
+
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: helm-guestbook-multisource
   namespace: argocd
+
 spec:
   project: default
   syncPolicy:
@@ -11,6 +13,10 @@ spec:
       selfHeal: true
     syncOptions:
     - CreateNamespace=true
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: helm-guestbook-multisource
 
   sources:
   - repoURL: 'https://github.com/argoproj/argocd-example-apps.git'
@@ -24,6 +30,4 @@ spec:
     targetRevision: HEAD
     ref: values
 
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: helm-guestbook-multisource
+

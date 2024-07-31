@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: helm-guestbook-multisource
+spec:
+  project: default
+  sources:
+  - repoURL: 'https://github.com/argoproj/argocd-example-apps.git'
+    path: helm-guestbook
+    targetRevision: HEAD
+    helm:
+      valueFiles:
+      - $values/helm-guestbook/values-dev.yaml
+
+  - repoURL: 'https://github.com/meodaiduoi/argocd-example-apps.git'
+    targetRevision: HEAD
+    ref: values
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: helm-guestbook
+  syncPolicy:
+    automated:
+      prune: true
